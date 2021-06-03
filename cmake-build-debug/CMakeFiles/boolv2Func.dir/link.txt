@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2020.2.1\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\boolv2Func.dir/objects.a
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\ar.exe cr CMakeFiles\boolv2Func.dir/objects.a @CMakeFiles\boolv2Func.dir\objects1.rsp
+C:\PROGRA~1\MINGW-~1\X86_64~1.0-W\mingw64\bin\gcc.exe -g   -Wl,--whole-archive CMakeFiles\boolv2Func.dir/objects.a -Wl,--no-whole-archive  -o boolv2Func.exe -Wl,--out-implib,libboolv2Func.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\boolv2Func.dir\linklibs.rsp

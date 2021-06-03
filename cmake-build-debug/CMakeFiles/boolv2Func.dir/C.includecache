@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/yarik/CLionProjects/boolv2Func/main.c
+stdio.h
+-
+stdlib.h
+-
+malloc.h
+-
+string.h
+-
+windows.h
+-
+
