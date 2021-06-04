@@ -66,6 +66,7 @@ int main(int args, char **argv) {
         printf("%d ", ar3[i]);
     }
 
+    printf("\n");
     printf(to_ANF(ar3, size));
 
     return 0;
