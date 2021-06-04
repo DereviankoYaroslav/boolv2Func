@@ -79,17 +79,20 @@ int main(int args, char **argv) {
     return 0;
 }
 
+//Функція перетворення елементів з десяткової СЧ у двійкову СЧ, для певного ступеня N
+
 int *binaryElements(int *arr, int size, int count) {
     int *result = calloc(size * count, sizeof(int));
     for (int i = 0; i < size; ++i) {
         int *bin = valueToBinary(arr[i], count);
         for (int j = 0, k = count - 1; j < count; ++j, k--) {
             result[j * size + i] = bin[k];
-            //printf("%d\n",bin[j]);
         }
     }
     return result;
 }
+
+//Функція перетворення масиву чисел у двійковій системі до таблиці істиності
 
 int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t){
     int calc = 0;
@@ -133,7 +136,7 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
     return calculation;
 }
 
-
+//Функція перетворення числа з десяткової СЧ у двійкову СЧ
 
 int *valueToBinary(int i, int rank) {
     int *res = calloc(rank, sizeof(int));
@@ -143,6 +146,8 @@ int *valueToBinary(int i, int rank) {
     return res;
 }
 
+//Функція зведення до ступеня
+
 int raiseToPower(int num, int pow) {
     int res = 1;
     for (int i = 0; i < pow; ++i) {
@@ -150,6 +155,8 @@ int raiseToPower(int num, int pow) {
     }
     return res;
 }
+
+//Функція генерації чисел для вхідних векторів ступеня N
 
 int *elemsForN(int size) {
     int *result = calloc(size, sizeof(int));
