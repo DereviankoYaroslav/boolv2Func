@@ -18,7 +18,7 @@ char *to_ANF(int *func, int size);
 
 int log2int(int n);
 
-int *GF(int n);
+int *GFRepresentation(int n);
 
 
 int main(int args, char **argv) {
@@ -152,23 +152,6 @@ int *elemsForN(int size) {
     return result;
 }
 
-int *anfRepresentation(int *func, int sizeOfF) {
-    int newSize = sizeOfF;
-    int *result = calloc(newSize, sizeof(int));
-    int j;
-    for (int i = 0; i < newSize; ++i) {
-        if (func[i] != 0) {
-            result[i] = i;
-            ++j;
-        } else if (func[i] == 0) {
-            result[i] = -1;
-        }
-    }
-    printf("\n");
-    return result;
-}
-
-
 int log2int(int n) {
     for (int i = 0; i < n; ++i) {
         if (raiseToPower(2, i) == n) return i;
@@ -176,11 +159,11 @@ int log2int(int n) {
     return -1;
 }
 
-int *GF(int n) {
-    int *arr = malloc(n * raiseToPower(2, n) * sizeof(int));
-    for (int i = 0; i < raiseToPower(2, n); ++i) {
-        for (int j = n - 1; j >= 0; --j) {
-            *(arr + i * n + j) = (i >> (n - j - 1)) & 1u;
+int *GFRepresentation(int pow) {
+    int *arr = malloc(pow * raiseToPower(2, pow) * sizeof(int));
+    for (int i = 0; i < raiseToPower(2, pow); ++i) {
+        for (int j = pow - 1; j >= 0; --j) {
+            *(arr + i * pow + j) = (i >> (pow - j - 1)) & 1u;
         }
     }
     return arr;
@@ -189,7 +172,7 @@ int *GF(int n) {
 char *to_ANF(int *func, int size) {
     int n = log2int(size);
     int length = 0;
-    int *table = GF(n);
+    int *table = GFRepresentation(n);
     int *matrix = malloc(sizeof(int) * size * size);
     for (int i = 0; i < size; ++i) {
         *(matrix + i) = *(func + size - 1 - i);
