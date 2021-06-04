@@ -45,10 +45,11 @@ int main(int args, char **argv) {
         printf("\n");
     }
 
-
-    int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, 2);
-    for (int i = 0; i < size; ++i) {
-        printf("%d ", ar2[i]);
+    for (int t = 0; t < size; ++t) {
+        int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, t);
+        for (int i = 0; i < size; ++i) {
+            printf("%d ", ar2[i]);
+        }
     }
 
 
@@ -73,22 +74,24 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
     int calc2 = 1;
     int calc3 = 0;
     int calculationFunc = 0;
+    printf("\n");
     printf("t = %d", t);
+    printf("\n");
     int *calculation = calloc(size, sizeof(int));
     for (int i = 0; i < size; ++i) {
         int *bin = valueToBinary(arr[i], count);
         for (int j = 0, k = count - 1; j < count; ++j, k--) {
-            printf("\n");
-            printf("bin k = %d", bin[k]);
-            printf("\n");
-            printf("arr2 i = %d", arr2[j*size+t]);
+            //printf("\n");
+            //printf("bin k = %d", bin[k]);
+            //printf("\n");
+            //printf("arr2 i = %d", arr2[j*size+t]);
             calc = raiseToPower(arr2[j*size+t],bin[k]);
-            printf("\n");
-            printf("raised to power = %d", calc);
+            //printf("\n");
+            //printf("raised to power = %d", calc);
             //printf("%d\n",bin[j]);
             calc2 = calc2*calc;
-            printf("\n");
-            printf("calc2 = %d", calc2);
+            //printf("\n");
+            //printf("calc2 = %d", calc2);
             calculation[arr[i]] = calc2;
         }
         calc2 = 1;
@@ -100,13 +103,10 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
                 printf("calc3 = %d", calc3);
             }
         }*/
-        calculationFunc = calc3;
-        printf("\n");
-        printf("calculationFunc = %d", calculationFunc);
         calc3 = 0;
-        printf("\n");
-        printf("calc3 = %d", calc3);
-        printf("\n");
+        //printf("\n");
+        //printf("calc3 = %d", calc3);
+        //printf("\n");
     }
     return calculation;
 }
