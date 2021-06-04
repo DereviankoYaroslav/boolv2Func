@@ -45,11 +45,27 @@ int main(int args, char **argv) {
         printf("\n");
     }
 
+    int *ar3 = calloc(size, sizeof(int));
+    int modulus = 0;
     for (int t = 0; t < size; ++t) {
         int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, t);
         for (int i = 0; i < size; ++i) {
-            printf("%d ", ar2[i]);
+            if(f[i]!=0) {
+                printf("%d ", ar2[i]);
+                modulus = modulus^ar2[i];
+            }
         }
+        printf("modulus = %d ", modulus);
+        ar3[t]=modulus;
+        modulus = 0;
+    }
+
+    printf("\n");
+    printf("\n");
+    printf("BOOLEAN FUNCTION\n");
+
+    for (int i = 0; i < size; ++i) {
+        printf("%d ", ar3[i]);
     }
 
 
