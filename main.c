@@ -14,13 +14,11 @@ int *binaryElements(int *func, int size, int count);
 
 int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t);
 
-int *anfRepresentation(int *func, int size);
+char *to_ANF(int *func, int size);
 
-int *functionElems(int *arr, int *arr2, int size, int count);
+int log2int(int n);
 
-int boolMassSize(int *arr, int *arr2, int size, int count);
-
-int *boolMass(int *arr, int *arr2, int size, int newSize, int count);
+int *GF(int n);
 
 
 int main(int args, char **argv) {
@@ -51,11 +49,11 @@ int main(int args, char **argv) {
         int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, t);
         for (int i = 0; i < size; ++i) {
             if(f[i]!=0) {
-                printf("%d ", ar2[i]);
+                //printf("%d ", ar2[i]);
                 modulus = modulus^ar2[i];
             }
         }
-        printf("modulus = %d ", modulus);
+        //printf("modulus = %d ", modulus);
         ar3[t]=modulus;
         modulus = 0;
     }
@@ -68,7 +66,7 @@ int main(int args, char **argv) {
         printf("%d ", ar3[i]);
     }
 
-
+    printf(to_ANF(ar3, size));
 
     return 0;
 }
@@ -90,9 +88,9 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
     int calc2 = 1;
     int calc3 = 0;
     int calculationFunc = 0;
-    printf("\n");
-    printf("t = %d", t);
-    printf("\n");
+    //printf("\n");
+    //printf("t = %d", t);
+    //printf("\n");
     int *calculation = calloc(size, sizeof(int));
     for (int i = 0; i < size; ++i) {
         int *bin = valueToBinary(arr[i], count);
@@ -127,62 +125,6 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
     return calculation;
 }
 
-int *functionElems(int *arr, int *arr2, int size, int count) {
-    int *result = calloc(size * count, sizeof(int));
-    for (int i = 0; i < size; ++i) {
-        if (arr[i] >= 0) {
-            int *bin = valueToBinary(arr[i], count);
-            for (int j = 0, k = count - 1; j < count; ++j, k--) {
-                /*if (bin[j] != 0) {
-                    printf("nnn %d\n",j*size+i);
-                    int calc = arr2[arr[i]*size];
-                    //printf("%d\n",calc);
-                    //printf("%d\n",bin[j]);
-                } else{
-                    printf("nnn %d\n",j*size+i);
-                }*/
-                result[j * size + i] = bin[k];
-            }
-        } else {
-            for (int j = 0, k = count - 1; j < count; ++j, k--) {
-                result[j * size + i] = -99;
-            }
-        }
-    }
-    return result;
-}
-
-int boolMassSize(int *arr, int *arr2, int size, int count) {
-    int newSize = 0;
-    for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (arr[i * size + j] > 0) {
-                printf("\n");
-                printf("index = %d", i * size + j);
-                printf("\n");
-                newSize = newSize + 1;
-                printf("size = %d", newSize);
-            }
-        }
-        printf("\n");
-    }
-    return newSize;
-}
-
-int *boolMass(int *arr, int *arr2, int size, int newSize, int count) {
-    int *result = calloc(newSize, sizeof(int));
-    int k = 0;
-    for (int i = 0; i < count; ++i) {
-        for (int j = 0; j < size; ++j) {
-            if (arr[i * size + j] > 0) {
-                result[k] = i * size + j;
-                ++k;
-            }
-        }
-        printf("\n");
-    }
-    return result;
-}
 
 
 int *valueToBinary(int i, int rank) {
@@ -222,6 +164,83 @@ int *anfRepresentation(int *func, int sizeOfF) {
         }
     }
     printf("\n");
+    return result;
+}
+
+
+int log2int(int n) {
+    for (int i = 0; i < n; ++i) {
+        if (raiseToPower(2, i) == n) return i;
+    }
+    return -1;
+}
+
+int *GF(int n) {
+    int *arr = malloc(n * raiseToPower(2, n) * sizeof(int));
+    for (int i = 0; i < raiseToPower(2, n); ++i) {
+        for (int j = n - 1; j >= 0; --j) {
+            *(arr + i * n + j) = (i >> (n - j - 1)) & 1u;
+        }
+    }
+    return arr;
+}
+
+char *to_ANF(int *func, int size) {
+    int n = log2int(size);
+    int length = 0;
+    int *table = GF(n);
+    int *matrix = malloc(sizeof(int) * size * size);
+    for (int i = 0; i < size; ++i) {
+        *(matrix + i) = *(func + size - 1 - i);
+    }
+    for (int i = 1; i < size; ++i) {
+        for (int j = 0; j < size - i; ++j) {
+            *(matrix + i * size + j) = (*(matrix + size * (i - 1) + j) + *(matrix + size * (i - 1) + (j + 1))) % 2;
+        }
+    }
+    /*for (int i = 0; i < size; ++i) {
+        if (*(matrix + i * size)) {
+            for (int j = 0; j < n; ++j) {
+                if ((table + i * n + j)) {
+                    length += 2;
+                }
+            }
+            length++;
+        }
+    }*/
+    int *coefs = malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i) {
+        coefs[i] = *(matrix + i * size);
+        if (coefs[i]) {
+            for (int j = 0; j < n; ++j) {
+                if (*(table + i * n + j)) {
+                    length += 2;
+                }
+            }
+            length++;
+        }
+    }
+
+    char *result = malloc(sizeof(char) * length - 1);
+    sprintf(result, "");
+    for (int i = 0; i < size; ++i) {
+        coefs[i] = *(matrix + i * size);
+        if (i == 0 && coefs[i] == 1) {
+            sprintf(result, "1");
+        }
+        if (coefs[i]) {
+            for (int j = 0; j < n; ++j) {
+                if (*(table + i * n + j)) {
+                    sprintf(result, "%sx%d", result, n - j);
+                }
+            }
+            sprintf(result, "%s+", result);
+        }
+    }
+    result[strlen(result) - 1] = '\0';
+    free(coefs);
+    free(table);
+    free(matrix);
     return result;
 }
 
