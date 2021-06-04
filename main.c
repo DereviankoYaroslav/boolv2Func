@@ -28,7 +28,7 @@ int main(int args, char **argv) {
     int n = 3;
     int size = raiseToPower(2, n);
     int *binElems = elemsForN(size);
-    int f[] = {1, 1, 0, 0, 1, 1, 0, 1};
+    int f[] = {0, 0, 1, 0, 1, 1, 1, 0};
 
     for (int i = 0; i < size; ++i) {
         printf("%d ", binElems[i]);
@@ -45,7 +45,7 @@ int main(int args, char **argv) {
 
     int *ar3 = calloc(size, sizeof(int));
     int modulus = 0;
-    for (int t = 0; t < size; ++t) {
+    for (int t = 0, k = size - 1; t < size; ++t, k--) {
         int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, t);
         for (int i = 0; i < size; ++i) {
             if(f[i]!=0) {
@@ -54,8 +54,9 @@ int main(int args, char **argv) {
             }
         }
         //printf("modulus = %d ", modulus);
-        ar3[t]=modulus;
+        ar3[k]=modulus;
         modulus = 0;
+        free(ar2);
     }
 
     printf("\n");
@@ -68,6 +69,10 @@ int main(int args, char **argv) {
 
     printf("\n");
     printf(to_ANF(ar3, size));
+
+    free(binElems);
+    free(ar);
+    free(ar3);
 
     return 0;
 }
