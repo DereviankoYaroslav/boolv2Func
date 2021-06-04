@@ -28,7 +28,7 @@ int main(int args, char **argv) {
     int n = 3;
     int size = raiseToPower(2, n);
     int *binElems = elemsForN(size);
-    int f[] = {0, 0, 1, 0, 1, 1, 1, 0};
+    int f[] = {0, 0, 1, 0, 0, 1, 1, 0};
 
     for (int i = 0; i < size; ++i) {
         printf("%d ", binElems[i]);
@@ -68,6 +68,8 @@ int main(int args, char **argv) {
     }
 
     printf("\n");
+    printf("\n");
+    printf("ANF REPRESENTATION\n");
     printf(to_ANF(ar3, size));
 
     free(binElems);
@@ -220,7 +222,7 @@ char *to_ANF(int *func, int size) {
         if (coefs[i]) {
             for (int j = 0; j < n; ++j) {
                 if (*(table + i * n + j)) {
-                    sprintf(result, "%sx%d", result, n - j);
+                    sprintf(result, "%sx%d", result, n - j-1);
                 }
             }
             sprintf(result, "%s+", result);
