@@ -12,7 +12,7 @@ int *elemsForN(int size);
 
 int *binaryElements(int *func, int size, int count);
 
-int massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t);
+int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t);
 
 int *anfRepresentation(int *func, int size);
 
@@ -30,7 +30,7 @@ int main(int args, char **argv) {
     int n = 3;
     int size = raiseToPower(2, n);
     int *binElems = elemsForN(size);
-    int f[] = {1, 0, 0, 1, 0, 1, 1, 0};
+    int f[] = {1, 1, 0, 0, 1, 1, 0, 1};
 
     for (int i = 0; i < size; ++i) {
         printf("%d ", binElems[i]);
@@ -46,8 +46,10 @@ int main(int args, char **argv) {
     }
 
 
-        int ar2 = massToBooleanFunc(binElems, ar, f, size, n, 0);
-        printf("\nCalc\n%d", ar2);
+    int *ar2 = massToBooleanFunc(binElems, ar, f, size, n, 2);
+    for (int i = 0; i < size; ++i) {
+        printf("%d ", ar2[i]);
+    }
 
 
 
@@ -66,7 +68,7 @@ int *binaryElements(int *arr, int size, int count) {
     return result;
 }
 
-int massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t){
+int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t){
     int calc = 0;
     int calc2 = 1;
     int calc3 = 0;
@@ -80,32 +82,33 @@ int massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t
             printf("bin k = %d", bin[k]);
             printf("\n");
             printf("arr2 i = %d", arr2[j*size+t]);
-            calc = raiseToPower(bin[k],arr2[j*size+t]);
+            calc = raiseToPower(arr2[j*size+t],bin[k]);
             printf("\n");
             printf("raised to power = %d", calc);
             //printf("%d\n",bin[j]);
             calc2 = calc2*calc;
             printf("\n");
             printf("calc2 = %d", calc2);
-            calculation[i] = calc2;
-            for (int r = 0; r<size; ++r){
-                if(arr3[r]!=0){
-                    printf(" rrr %d", calculation[r]);
-                    calc3 = calc3^calculation[r];
-                    printf("\n");
-                    printf("calc3 = %d", calc3);
-                }
-            }
-            calculationFunc = calc3;
-            printf("calculationFunc = %d", calculationFunc);
-            calc3 = 0;
+            calculation[arr[i]] = calc2;
         }
+        calc2 = 1;
+        /*for (int r = 0; r<size; ++r){
+            if(arr3[r]!=0){
+                printf(" rrr %d", calculation[r]);
+                calc3 = calc3^calculation[r];
+                printf("\n");
+                printf("calc3 = %d", calc3);
+            }
+        }*/
+        calculationFunc = calc3;
         printf("\n");
-        printf("calc2 = %d", calc2);
+        printf("calculationFunc = %d", calculationFunc);
+        calc3 = 0;
         printf("\n");
         printf("calc3 = %d", calc3);
+        printf("\n");
     }
-    return calculationFunc;
+    return calculation;
 }
 
 int *functionElems(int *arr, int *arr2, int size, int count) {
