@@ -14,9 +14,9 @@ int *binaryElements(int *func, int size, int count);
 
 int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int t);
 
-char *to_ANF(int *func, int size);
+int *to_ANF(int *func, int size);
 
-int log2int(int n);
+int fieldFinding(int n);
 
 int *GFRepresentation(int n);
 
@@ -36,7 +36,7 @@ int main(int args, char **argv) {
     printf("\nBooleans\n");
     int *ar = binaryElements(binElems, size, n);
     for (int i = 0; i < n; ++i) {
-        printf("x%d = ", i + 1);
+        printf("x%d = ", i);
         for (int j = 0; j < size; ++j) {
             printf("%d ", ar[i * size + j]);
         }
@@ -70,7 +70,11 @@ int main(int args, char **argv) {
     printf("\n");
     printf("\n");
     printf("ANF REPRESENTATION\n");
-    printf(to_ANF(ar3, size));
+    int *ar4 = to_ANF(ar3, size);
+
+    for (int i = 0; i < size; ++i) {
+        printf("%d ", ar4[i]);
+    }
 
     free(binElems);
     free(ar);
@@ -166,7 +170,7 @@ int *elemsForN(int size) {
     return result;
 }
 
-int log2int(int n) {
+int fieldFinding(int n) {
     for (int i = 0; i < n; ++i) {
         if (raiseToPower(2, i) == n) return i;
     }
@@ -174,28 +178,39 @@ int log2int(int n) {
 }
 
 int *GFRepresentation(int pow) {
-    int *arr = malloc(pow * raiseToPower(2, pow) * sizeof(int));
+    int *arr = calloc(pow * raiseToPower(2, pow),sizeof(int));
     for (int i = 0; i < raiseToPower(2, pow); ++i) {
         for (int j = pow - 1; j >= 0; --j) {
-            *(arr + i * pow + j) = (i >> (pow - j - 1)) & 1u;
+            arr [i * pow + j] = (i >> (pow - j - 1)) & 1;
+            //printf("arr = %d", i * pow + j);
+            //printf("value = %d", (i >> (pow - j - 1)) & 1);
         }
     }
     return arr;
 }
 
-char *to_ANF(int *func, int size) {
-    int n = log2int(size);
+int *to_ANF(int *func, int size) {
+    int n = fieldFinding(size);
+    printf("n = %d", n);
+    printf("\n");
     int length = 0;
     int *table = GFRepresentation(n);
-    int *matrix = malloc(sizeof(int) * size * size);
+    int *matrix = calloc(size * size,sizeof(int));
     for (int i = 0; i < size; ++i) {
-        *(matrix + i) = *(func + size - 1 - i);
+        matrix[i] = func[size - 1 - i];
     }
     for (int i = 1; i < size; ++i) {
         for (int j = 0; j < size - i; ++j) {
-            *(matrix + i * size + j) = (*(matrix + size * (i - 1) + j) + *(matrix + size * (i - 1) + (j + 1))) % 2;
+            matrix [i * size + j] = (matrix [size * (i - 1) + j] + matrix [size * (i - 1) + (j + 1)]) % 2;
         }
     }
+    /*
+    for (int k = 0; k < size; ++k) {
+        for (int l = 0; l < size; ++l) {
+            printf(" %d", matrix[k*size+l]);
+        }
+        printf("\n");
+    }*/
     /*for (int i = 0; i < size; ++i) {
         if (*(matrix + i * size)) {
             for (int j = 0; j < n; ++j) {
@@ -208,27 +223,27 @@ char *to_ANF(int *func, int size) {
     }*/
     int *coefs = malloc(size * sizeof(int));
     for (int i = 0; i < size; ++i) {
-        coefs[i] = *(matrix + i * size);
+        coefs[i] = matrix [i * size];
         if (coefs[i]) {
             for (int j = 0; j < n; ++j) {
-                if (*(table + i * n + j)) {
+                if (table [i * n + j]) {
                     length += 2;
                 }
             }
             length++;
         }
     }
-
+    /*
     char *result = malloc(sizeof(char) * length - 1);
     sprintf(result, "");
     for (int i = 0; i < size; ++i) {
-        coefs[i] = *(matrix + i * size);
+        coefs[i] = matrix [i * size];
         if (i == 0 && coefs[i] == 1) {
             sprintf(result, "1");
         }
         if (coefs[i]) {
             for (int j = 0; j < n; ++j) {
-                if (*(table + i * n + j)) {
+                if (table [i * n + j]) {
                     sprintf(result, "%sx%d", result, n - j-1);
                 }
             }
@@ -239,6 +254,7 @@ char *to_ANF(int *func, int size) {
     free(coefs);
     free(table);
     free(matrix);
-    return result;
+     */
+    return coefs;
 }
 
