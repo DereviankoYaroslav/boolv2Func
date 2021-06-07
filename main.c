@@ -16,6 +16,10 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
 
 int *to_ANF(int *func, int size);
 
+int HammingWeight(int *function, int size);
+
+void funcIsBalanced(int weight, int pow);
+
 
 int main(int args, char **argv) {
     SetConsoleOutputCP(1251);
@@ -82,6 +86,14 @@ int main(int args, char **argv) {
     for (int i = 0; i < size; ++i) {
         printf("%d ", ar4[i]);
     }
+
+    printf("\n");
+    printf("\n");
+    int weight = HammingWeight(ar3,size);
+    printf("HW = %d ", weight);
+    funcIsBalanced(weight,n);
+
+
 
     free(binElems);
     free(ar);
@@ -202,5 +214,33 @@ int *to_ANF(int *func, int size) {
     }
     free(matrix);
     return coefs;
+}
+
+int HammingWeight(int *function, int size){
+    int weight;
+    for (int i = 0; i<size; ++i){
+        if (function[i]){
+            weight++;
+        }
+    }
+    return weight;
+}
+
+void funcIsBalanced(int weight, int pow){
+    if (weight == raiseToPower(2,pow-1)){
+        printf("\nFunction is BALANCED!");
+    } else{
+        printf("\nFunction is NOT BALANCED!");
+    }
+}
+
+int algebraicDec(int *function, int size){
+    int weight;
+    for (int i = 0; i<size; ++i){
+        if (function[i]){
+            weight++;
+        }
+    }
+    return weight;
 }
 
