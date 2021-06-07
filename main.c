@@ -18,7 +18,6 @@ int *to_ANF(int *func, int size);
 
 int fieldFinding(int n);
 
-int *GFRepresentation(int n);
 
 
 int main(int args, char **argv) {
@@ -172,89 +171,64 @@ int *elemsForN(int size) {
 
 int fieldFinding(int n) {
     for (int i = 0; i < n; ++i) {
-        if (raiseToPower(2, i) == n) return i;
+        if (raiseToPower(2, i) == n)
+            return i;
     }
-    return -1;
-}
-
-int *GFRepresentation(int pow) {
-    int *arr = calloc(pow * raiseToPower(2, pow),sizeof(int));
-    for (int i = 0; i < raiseToPower(2, pow); ++i) {
-        for (int j = pow - 1; j >= 0; --j) {
-            arr [i * pow + j] = (i >> (pow - j - 1)) & 1;
-            //printf("arr = %d", i * pow + j);
-            //printf("value = %d", (i >> (pow - j - 1)) & 1);
-        }
-    }
-    return arr;
+    return -99;
 }
 
 int *to_ANF(int *func, int size) {
-    int n = fieldFinding(size);
-    printf("n = %d", n);
-    printf("\n");
-    int length = 0;
-    int *table = GFRepresentation(n);
-    int *matrix = calloc(size * size,sizeof(int));
-    for (int i = 0; i < size; ++i) {
-        matrix[i] = func[size - 1 - i];
-    }
-    for (int i = 1; i < size; ++i) {
-        for (int j = 0; j < size - i; ++j) {
-            matrix [i * size + j] = (matrix [size * (i - 1) + j] + matrix [size * (i - 1) + (j + 1)]) % 2;
+        int *matrix = calloc(size * size, sizeof(int));
+        for (int i = 0; i < size; ++i) {
+            matrix[i] = func[size - 1 - i];
         }
-    }
-    /*
-    for (int k = 0; k < size; ++k) {
-        for (int l = 0; l < size; ++l) {
-            printf(" %d", matrix[k*size+l]);
-        }
-        printf("\n");
-    }*/
-    /*for (int i = 0; i < size; ++i) {
-        if (*(matrix + i * size)) {
-            for (int j = 0; j < n; ++j) {
-                if ((table + i * n + j)) {
-                    length += 2;
-                }
+        /*for (int k = 0; k < size; ++k) {
+            for (int l = 0; l < size; ++l) {
+                printf(" %d", matrix[k*size+l]);
             }
-            length++;
-        }
-    }*/
-    int *coefs = malloc(size * sizeof(int));
-    for (int i = 0; i < size; ++i) {
-        coefs[i] = matrix [i * size];
-        if (coefs[i]) {
-            for (int j = 0; j < n; ++j) {
-                if (table [i * n + j]) {
-                    length += 2;
-                }
+            printf("\n");
+        }*/
+        for (int i = 1; i < size; ++i) {
+            for (int j = 0; j < size - i; ++j) {
+                matrix[i * size + j] = (matrix[size * (i - 1) + j] + matrix[size * (i - 1) + (j + 1)]) % 2;
             }
-            length++;
         }
-    }
-    /*
-    char *result = malloc(sizeof(char) * length - 1);
-    sprintf(result, "");
-    for (int i = 0; i < size; ++i) {
-        coefs[i] = matrix [i * size];
-        if (i == 0 && coefs[i] == 1) {
-            sprintf(result, "1");
-        }
-        if (coefs[i]) {
-            for (int j = 0; j < n; ++j) {
-                if (table [i * n + j]) {
-                    sprintf(result, "%sx%d", result, n - j-1);
+        /*for (int i = 0; i < size; ++i) {
+            if (*(matrix + i * size)) {
+                for (int j = 0; j < n; ++j) {
+                    if ((table + i * n + j)) {
+                        length += 2;
+                    }
                 }
+                length++;
             }
-            sprintf(result, "%s+", result);
+        }*/
+        int *coefs = malloc(size * sizeof(int));
+        for (int i = 0; i < size; ++i) {
+            coefs[i] = matrix[i * size];
         }
-    }
-    result[strlen(result) - 1] = '\0';
-    free(coefs);
-    free(table);
-    free(matrix);
-     */
-    return coefs;
+        /*
+        char *result = malloc(sizeof(char) * length - 1);
+        sprintf(result, "");
+        for (int i = 0; i < size; ++i) {
+            coefs[i] = matrix [i * size];
+            if (i == 0 && coefs[i] == 1) {
+                sprintf(result, "1");
+            }
+            if (coefs[i]) {
+                for (int j = 0; j < n; ++j) {
+                    if (table [i * n + j]) {
+                        sprintf(result, "%sx%d", result, n - j-1);
+                    }
+                }
+                sprintf(result, "%s+", result);
+            }
+        }
+        result[strlen(result) - 1] = '\0';
+        free(coefs);
+        free(table);
+        free(matrix);
+         */
+        return coefs;
 }
 
