@@ -16,22 +16,31 @@ int *massToBooleanFunc(int *arr, int *arr2, int *arr3, int size, int count, int 
 
 int *to_ANF(int *func, int size);
 
-int fieldFinding(int n);
-
-
 
 int main(int args, char **argv) {
     SetConsoleOutputCP(1251);
     SetConsoleCP(1251);
 
     int n = 3;
+    /*printf("Enter N:");
+    scanf("%d",&n);
+    printf("N = %d",n);*/
     int size = raiseToPower(2, n);
     int *binElems = elemsForN(size);
-    int f[] = {0, 0, 1, 0, 0, 1, 1, 0};
+    int f[] = {0,0,1,0,0,1,1,0};
+    /*int f[size];
+    printf("\n");
+    printf("Enter function using 0 and 1:");
+    printf("\n");
+    for (int i = 0; i < size; ++i){
+        printf("Enter f[%d]:",i);
+        scanf("%d",&f[i]);
+    }*/
 
-    for (int i = 0; i < size; ++i) {
+    /*for (int i = 0; i < size; ++i) {
         printf("%d ", binElems[i]);
-    }
+    }*/
+
     printf("\nBooleans\n");
     int *ar = binaryElements(binElems, size, n);
     for (int i = 0; i < n; ++i) {
@@ -59,8 +68,7 @@ int main(int args, char **argv) {
     }
 
     printf("\n");
-    printf("\n");
-    printf("BOOLEAN FUNCTION\n");
+    printf("TRUTH TABLE FOR FUNCTION\n");
 
     for (int i = 0; i < size; ++i) {
         printf("%d ", ar3[i]);
@@ -78,6 +86,7 @@ int main(int args, char **argv) {
     free(binElems);
     free(ar);
     free(ar3);
+    free(ar4);
 
     return 0;
 }
@@ -169,66 +178,29 @@ int *elemsForN(int size) {
     return result;
 }
 
-int fieldFinding(int n) {
-    for (int i = 0; i < n; ++i) {
-        if (raiseToPower(2, i) == n)
-            return i;
-    }
-    return -99;
-}
+//Функція переведення з таблиці істиності до АНФ
 
 int *to_ANF(int *func, int size) {
-        int *matrix = calloc(size * size, sizeof(int));
-        for (int i = 0; i < size; ++i) {
-            matrix[i] = func[size - 1 - i];
+    int *matrix = calloc(size * size, sizeof(int));
+    for (int i = 0; i < size; ++i) {
+        matrix[i] = func[size - 1 - i];
+    }
+    /*for (int k = 0; k < size; ++k) {
+        for (int l = 0; l < size; ++l) {
+            printf(" %d", matrix[k*size+l]);
         }
-        /*for (int k = 0; k < size; ++k) {
-            for (int l = 0; l < size; ++l) {
-                printf(" %d", matrix[k*size+l]);
-            }
-            printf("\n");
-        }*/
-        for (int i = 1; i < size; ++i) {
-            for (int j = 0; j < size - i; ++j) {
-                matrix[i * size + j] = (matrix[size * (i - 1) + j] + matrix[size * (i - 1) + (j + 1)]) % 2;
-            }
+        printf("\n");
+    }*/
+    for (int i = 1; i < size; ++i) {
+        for (int j = 0; j < size - i; ++j) {
+            matrix[i * size + j] = (matrix[size * (i - 1) + j] + matrix[size * (i - 1) + (j + 1)]) % 2;
         }
-        /*for (int i = 0; i < size; ++i) {
-            if (*(matrix + i * size)) {
-                for (int j = 0; j < n; ++j) {
-                    if ((table + i * n + j)) {
-                        length += 2;
-                    }
-                }
-                length++;
-            }
-        }*/
-        int *coefs = malloc(size * sizeof(int));
-        for (int i = 0; i < size; ++i) {
-            coefs[i] = matrix[i * size];
-        }
-        /*
-        char *result = malloc(sizeof(char) * length - 1);
-        sprintf(result, "");
-        for (int i = 0; i < size; ++i) {
-            coefs[i] = matrix [i * size];
-            if (i == 0 && coefs[i] == 1) {
-                sprintf(result, "1");
-            }
-            if (coefs[i]) {
-                for (int j = 0; j < n; ++j) {
-                    if (table [i * n + j]) {
-                        sprintf(result, "%sx%d", result, n - j-1);
-                    }
-                }
-                sprintf(result, "%s+", result);
-            }
-        }
-        result[strlen(result) - 1] = '\0';
-        free(coefs);
-        free(table);
-        free(matrix);
-         */
-        return coefs;
+    }
+    int *coefs = malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i) {
+        coefs[i] = matrix[i * size];
+    }
+    free(matrix);
+    return coefs;
 }
 
