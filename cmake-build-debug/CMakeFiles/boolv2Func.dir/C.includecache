@@ -11,10 +11,8 @@ stdio.h
 -
 stdlib.h
 -
-malloc.h
--
-string.h
--
 windows.h
+-
+time.h
 -
 
