@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <time.h>
+#include <pthread.h>
+#include <math.h>
 
 int raiseToPower(int num, int pow);
 
@@ -661,10 +663,10 @@ int HammingWeight(const int *function, int size) {
 int funcIsBalanced(int weight, int pow) {
     int flag = 1;
     if (weight == raiseToPower(2, pow - 1)) {
-        printf("\nFunction is BALANCED!");
+        //printf("\nFunction is BALANCED!");
         return flag;
     } else {
-        printf("\nFunction is NOT BALANCED!");
+        //printf("\nFunction is NOT BALANCED!");
         flag = 0;
         return flag;
     }
@@ -1416,13 +1418,13 @@ int *SBoxToBooleanFunc(int *sbox, int size, int count) {
 
     for (int i = 0; i < count; ++i) {
         int *temp = calloc(size, sizeof(int));
-        printf("Function %d", i);
+        //printf("Function %d", i);
         for (int j = 0; j < size; ++j) {
             temp[j] = result[i * size + j];
         }
         int weight = HammingWeight(temp, size);
         int flag = funcIsBalanced(weight, count);
-        printf("\n");
+        //printf("\n");
     }
     return result;
 }
@@ -1527,10 +1529,10 @@ int *propertiesOfLinearCombinations(int *arr, int size, int count) {
     int *maxAC = calloc(size - 1, sizeof(int));
     int *minDEC = calloc(size - 1, sizeof(int));
     int balancedFlag = 1;
-    printf("\nLINEAR COMBINATIONS PROPERTIES\n");
+    //printf("\nLINEAR COMBINATIONS PROPERTIES\n");
     for (int i = 0; i < size - 1; ++i) {
         int *temp = calloc(size, sizeof(int));
-        printf("\nCombination %d", i + 1);
+        //printf("\nCombination %d", i + 1);
         for (int j = 0; j < size; ++j) {
             temp[j] = arr[i * size + j];
         }
@@ -1541,65 +1543,65 @@ int *propertiesOfLinearCombinations(int *arr, int size, int count) {
             balancedFlag = flag;
         }
         int *fxarr = HadamardCoefficients(temp, size, count);
-        printf("\nHADAMARD COEFFICIENTS");
+        /*printf("\nHADAMARD COEFFICIENTS");
         printf("\n");
         for (int q = 0; q < size; ++q) {
             printf("%d ", fxarr[q]);
-        }
+        }*/
         int max1 = HadamardMax(fxarr, size);
         //printf("\n max = %d", max1);
         int nl2 = HadamardNLinearity(max1, count);
-        printf("\n");
+        /*printf("\n");
         printf("\nHADAMARD NON LINEARITY = %d", nl2);
-        printf("\n");
+        printf("\n");*/
         minimalNL[i] = nl2;
         int k = 1;
-        int ec = expansionCriterion(temp, size, k);
-        printf("\n");
+        //int ec = expansionCriterion(temp, size, k);
+        //printf("\n");
         int *ar = autoCorrelation(temp, size, count);
 
-        printf("\nAUTO CORRELATING FUNCTION");
+        /*printf("\nAUTO CORRELATING FUNCTION");
         printf("\n");
         for (int w = size - 1; w >= 0; w--) {
             printf("%d ", ar[w]);
         }
-        printf("\n");
+        printf("\n");*/
 
         int AC = autoCorrelationMax(ar, size);
-        printf("\nAUTO CORRELATION = %d", AC);
-        printf("\n");
+        //printf("\nAUTO CORRELATION = %d", AC);
+        //printf("\n");
         maxAC[i] = AC;
         int dec = algebraicDeg(temp, size, count);
-        printf("\nALGEBRAIC DEGREE = %d ", dec);
-        printf("\n");
+        //printf("\nALGEBRAIC DEGREE = %d ", dec);
+        //printf("\n");
         minDEC[i] = dec;
     }
     int min = 0;
     min = minimalNL[0];
-    printf("\nNON-LINEARITIES ARRAY");
-    printf("\n");
+    //printf("\nNON-LINEARITIES ARRAY");
+    //printf("\n");
     for (int r = 0; r < size - 1; ++r) {
-        printf("%d ", minimalNL[r]);
+        //printf("%d ", minimalNL[r]);
         if (minimalNL[r] < min) {
             min = minimalNL[r];
         }
     }
     int max;
     max = maxAC[0];
-    printf("\nAC ARRAYS");
-    printf("\n");
+    //printf("\nAC ARRAYS");
+    //printf("\n");
     for (int t = 0; t < size - 1; ++t) {
-        printf("%d ", maxAC[t]);
+        //printf("%d ", maxAC[t]);
         if (maxAC[t] > max) {
             max = maxAC[t];
         }
     }
     int minD = 0;
     minD = minDEC[0];
-    printf("\nDEC ARRAY");
-    printf("\n");
+    //printf("\nDEC ARRAY");
+    //printf("\n");
     for (int y = 0; y < size - 1; ++y) {
-        printf("%d ", minDEC[y]);
+        //printf("%d ", minDEC[y]);
         if (minDEC[y] < minD) {
             minD = minDEC[y];
         }
@@ -1706,10 +1708,10 @@ int costFunction(int *sbox, int size, int count) {
     int cost;
     cost = costArray[0];
     //printf("\n");
-    printf("\nCOST ARRAY");
-    printf("\n");
+    //printf("\nCOST ARRAY");
+    //printf("\n");
     for (int t = 0; t < size - 1; ++t) {
-        printf("%d ", costArray[t]);
+        //printf("%d ", costArray[t]);
         if (costArray[t] > cost) {
             cost = costArray[t];
         }
@@ -1718,60 +1720,83 @@ int costFunction(int *sbox, int size, int count) {
 }
 
 int *simulatedAnnealing(int *sbox, int size, int count) {
-    int MIL = 1;
+    double T = 1;
+    double a = 0.1;
+    int MIL = 100;
     int *SBoxBest = calloc(size, sizeof(int));
+    int *SB = calloc(size*count, sizeof(int));
     SBoxBest = booleanFunctionsToSBox(sbox,size,count);
     for (int i = 0; i < size; ++i) {
-        printf("%d ", SBoxBest[i]);
+        //printf("%d ", SBoxBest[i]);
     }
     int *S = calloc(size, sizeof(int));
     for (int i = 0; i < size; ++i) {
         S[i] = SBoxBest[i];
     }
+    SB = SBoxToBooleanFunc(S,size,count);
+    int first =rand() % (size);
+    int second = rand() % (size);
         for (int i = 0; i < MIL; ++i) {
-            int *Y = calloc(size, sizeof(int));
             srand(time(NULL));
-            int first = rand() % (size);
-            int second = rand() % (size);
+            int *Y = calloc(size, sizeof(int));
+            for (int i = 0; i < size*count; ++i) {
+                printf("%d ", SB[i]);
+            }
+            int costOfPrevious = costFunction(SB,size,count);
+            printf("COST OF OLD ===%d ", costOfPrevious);
+            int NLofS = NLOfSBox(SB, size, count);
+            printf("NL OF OLD ===%d ", NLofS);
+            printf("\n");
+            printf("First = %d ", first);
+            printf("Second = %d ", second);
             for (int i = 0; i < size; ++i) {
                 Y[i] = S[i];
             }
             int tmp = Y[first];
             Y[first] = Y[second];
             Y[second] = tmp;
-            for (int i = 0; i < size; ++i) {
-                S[i] = Y[i];
-            }
-            int *SB = SBoxToBooleanFunc(S,size,count);
-            for (int i = 0; i < size*count; ++i) {
-                printf("%d ", SB[i]);
-            }
-            int NLofS = NLOfSBox(SB, size, count);
-            printf("NL OF S ===%d ", NLofS);
-
-            /*costY = cost_4_16(Y, count, params->costParams);//стоимость потомка
-            costS = cost_4_16(S, count, params->costParams);//текущая стоимость
-            delta = costY - costS;//разница стоимости
-            //если потомок лучше текущего претендента
+            first = (first+Y[second])%size;
+            second = (second+Y[first])%size;
+            int *SY = SBoxToBooleanFunc(Y,size,count);
+            int costOfNew = costFunction(SY,size,count);
+            printf("COST OF NEW ===%d ", costOfNew);
+            int NLofNS = NLOfSBox(SY, size, count);
+            printf("NL OF NEW ===%d ", NLofNS);
+            int delta = costOfNew - costOfPrevious;
+            printf("\nDelta ===%d ", delta);
             if (delta < 0) {
                 for (int j = 0; j < size * count; ++j) {
-                    S[j] = Y[j];
+                    SB[j] = SY[j];
+                    printf("SB [j] ===%d ", SB[j]);
                 }
             } else {
                 //генерируем случайное число 0..1
-                double u = (double) (rand() + pthread_self()) / RAND_MAX;
+                srand(time(NULL));
+                int N = 100;
+                int rd = rand() % (N);
+                printf("\nrd ===%d ", rd);
+                double u = (double)rd/N;
+                printf("\nu ===%lf\n ", u);
                 double t = (double) delta / T;
+                printf("\ndt ===%lf\n ", exp(-t));
                 if (u < exp(-t)) {
                     //с некой вероятностью принимаем худшего потомка
                     for (int j = 0; j < size * count; ++j) {
-                        S[j] = Y[j];
+                        SB[j] = SY[j];
                     }
                 }
-            }*/
-            free(Y);
-        //}//кінець внутрішнього циклу
+            }
+            S = booleanFunctionsToSBox(SB,size,count);
     }
-    return S;
+    T = T * a;
+    /*for (int j = 0; j < size * count; ++j) {
+        printf("%d ", SB[j]);
+    }*/
+    int SNL = NLOfSBox(SB, size, count);
+    printf("SNL ===%d ", SNL);
+    /*int SAC = ACOfSBox(SB, size, count);
+    printf("SAC ===%d ", SAC);*/
+    return SB;
 }
 
 int testNL(int *sbox, int size, int count){

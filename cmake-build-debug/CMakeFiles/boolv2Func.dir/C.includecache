@@ -15,4 +15,8 @@ windows.h
 -
 time.h
 -
+pthread.h
+-
+math.h
+-
 
